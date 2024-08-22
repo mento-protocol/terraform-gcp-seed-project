@@ -26,7 +26,7 @@ module "bootstrap" {
     "roles/resourcemanager.organizationAdmin"
   ]
   org_id               = var.org_id
-  project_prefix       = "mento-terraform"
+  project_prefix       = var.project_name
   random_suffix        = true
   sa_org_iam_permissions = [
     "roles/billing.user",
@@ -35,7 +35,6 @@ module "bootstrap" {
     "roles/iam.securityAdmin",
     "roles/iam.serviceAccountAdmin",
     "roles/logging.configWriter",
-    "roles/logging.logWriter",
     "roles/orgpolicy.policyAdmin",
     "roles/resourcemanager.folderAdmin",
     "roles/resourcemanager.organizationViewer",

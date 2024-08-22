@@ -4,26 +4,26 @@ set -o pipefail # Ensure piped commands propagate exit codes properly
 set -u          # Treat unset variables as an error when substituting
 
 check_gcloud_login() {
-    echo "🌀 Checking gcloud login..."
-    # Check if there's an active account
-    if ! gcloud auth list --filter=status:ACTIVE --format="value(account)" | grep -q .; then
-        echo "No active Google Cloud account found. Initiating login..."
-        gcloud auth login
-        echo "✅ Successfully logged in to gcloud"
-    else
-        echo "ℹ️  Already logged in to Google Cloud."
-    fi
-    printf "\n"
+	echo "🌀 Checking gcloud login..."
+	# Check if there's an active account
+	if ! gcloud auth list --filter=status:ACTIVE --format="value(account)" | grep -q .; then
+		echo "No active Google Cloud account found. Initiating login..."
+		gcloud auth login
+		echo "✅ Successfully logged in to gcloud"
+	else
+		echo "ℹ️  Already logged in to Google Cloud."
+	fi
+	printf "\n"
 
-    echo "🌀 Checking gcloud application-default credentials..."
-    if ! gcloud auth application-default print-access-token &>/dev/null; then
-        echo "No valid application-default credentials found. Initiating login..."
-        gcloud auth application-default login
-        echo "✅ Successfully logged in to gcloud"
-    else
-        echo "ℹ️  Already logged in with valid application-default credentials."
-    fi
-    printf "\n"
+	echo "🌀 Checking gcloud application-default credentials..."
+	if ! gcloud auth application-default print-access-token &>/dev/null; then
+		echo "No valid application-default credentials found. Initiating login..."
+		gcloud auth application-default login
+		echo "✅ Successfully logged in to gcloud"
+	else
+		echo "ℹ️  Already logged in with valid application-default credentials."
+	fi
+	printf "\n"
 }
 
 set_project_id() {
@@ -36,17 +36,17 @@ set_project_id() {
 	printf ' \033[1m%s\033[0m\n' "${project_id}"
 
 	# Set your local default project
-	echo "Setting your default project to \033[1m%s\033[0m...\n" "${project_id}"
+	printf "Setting your default project to \033[1m%s\033[0m...\n" "${project_id}"
 	gcloud config set project "${project_id}"
-    printf "\n"
+	printf "\n"
 
 	# Set the quota project to the governance-watchdog project, some gcloud commands require this to be set
-	echo "Setting the quota project to \033[1m%s\033[0m...\n" "${project_id}"
+	printf "Setting the quota project to \033[1m%s\033[0m...\n" "${project_id}"
 	gcloud auth application-default set-quota-project "${project_id}"
-    printf "\n"
+	printf "\n"
 
 	echo "✅ All Done!"
-    printf "\n"
+	printf "\n"
 }
 
 cache_file=".project_vars_cache"
@@ -108,15 +108,15 @@ invalidate_cache() {
 
 # Main script logic
 main() {
-    check_gcloud_login
+	check_gcloud_login
 
-    printf "Loading current local gcloud project ID: "
+	printf "Loading current local gcloud project ID: "
 	current_local_project_id=$(gcloud config get project)
-    printf ' \033[1m%s\033[0m\n' "${current_local_project_id}"
+	printf ' \033[1m%s\033[0m\n' "${current_local_project_id}"
 
-    printf "Comparing with project ID from terraform state: "
+	printf "Comparing with project ID from terraform state: "
 	current_tf_state_project_id=$(terraform state show module.bootstrap.module.seed_project.module.project-factory.google_project.main | grep project_id | awk '{print $3}' | tr -d '"')
-    printf ' \033[1m%s\033[0m\n' "${current_tf_state_project_id}"
+	printf ' \033[1m%s\033[0m\n' "${current_tf_state_project_id}"
 
 	if [[ ${current_local_project_id} != "${current_tf_state_project_id}" ]]; then
 		printf '️\n🚨 Your local gcloud is set to the wrong project: \033[1m%s\033[0m 🚨\n' "${current_local_project_id}"
