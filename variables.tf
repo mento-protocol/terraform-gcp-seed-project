@@ -30,3 +30,17 @@ variable "group_org_admins" {
 variable "group_billing_admins" {
   type = string
 }
+
+# You can look this up via:
+#  `gcloud secrets list`
+variable "discord_webhook_url_secret_id" {
+  type    = string
+  default = "discord-webhook-url"
+}
+
+# You can look this up either on the Discord Channel settings, or fetch it from Secret Manager via:
+#  `gcloud secrets versions access latest --secret discord-webhook-url`
+variable "discord_webhook_url" {
+  type      = string
+  sensitive = true
+}
