@@ -22,5 +22,6 @@ terraform {
 
   backend "gcs" {
     bucket = "mento-terraform-tfstate-6ed6"
+    impersonate_service_account = "org-terraform@mento-terraform-seed-ffac.iam.gserviceaccount.com"
   }
 }
