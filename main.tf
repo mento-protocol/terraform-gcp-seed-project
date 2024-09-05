@@ -61,3 +61,15 @@ resource "google_storage_bucket_object" "function_source" {
   bucket = google_storage_bucket.function_bucket.name
   source = data.archive_file.function_source.output_path
 }
+
+resource "google_monitoring_notification_channel" "discord_channel" {
+  display_name = "Discord Notification Channel"
+  type         = "webhook_tokenauth"
+  labels = {
+    url = google_cloudfunctions_function.notification_function.https_trigger_url
+  }
+
+  user_labels = {
+    email_type = "discord"
+  }
+}
