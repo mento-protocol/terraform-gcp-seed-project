@@ -170,3 +170,10 @@ terraform {
     }
 }
 ```
+
+## Troubleshooting
+
+### Permission problems when creating new projects
+
+For troubleshooting permission issues when using the Terraform Service Account to create new projects,
+see: <https://github.com/terraform-google-modules/terraform-google-project-factory/blob/master/docs/TROUBLESHOOTING.md>
