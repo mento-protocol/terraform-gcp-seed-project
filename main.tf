@@ -11,7 +11,9 @@ module "bootstrap" {
     # https://github.com/terraform-google-modules/terraform-google-project-factory?tab=readme-ov-file#apis
     "admin.googleapis.com",
 
-    # Used by other projects from us
+    # Used by many projects from us
+    "logging.googleapis.com",
+    "monitoring.googleapis.com",
     "pubsub.googleapis.com"
   ]
   billing_account      = var.billing_account
