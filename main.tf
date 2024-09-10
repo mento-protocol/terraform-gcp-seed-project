@@ -31,17 +31,20 @@ module "bootstrap" {
   project_prefix       = var.project_name
   random_suffix        = true
   sa_org_iam_permissions = [
-    "roles/billing.user",
-    "roles/compute.networkAdmin",
-    "roles/compute.xpnAdmin",
+    "roles/billing.user",                      # Required for associating the billing account with a project
     "roles/iam.securityAdmin",
     "roles/iam.serviceAccountAdmin",
     "roles/logging.configWriter",
     "roles/orgpolicy.policyAdmin",
     "roles/resourcemanager.folderAdmin",
-    "roles/resourcemanager.organizationViewer",
-    # Necessary to i.e. give a local project service account permissions to invoke a cloud function
-    "roles/run.admin"
+    "roles/resourcemanager.projectCreator",     # Required for creating GCP projects within the organization.
+    "roles/resourcemanager.organizationViewer", # Required for looking up the domain name associated with the GCP organization ID.
+    "roles/run.admin"                           # Necessary to i.e. give a local project service account permissions to invoke a cloud function
+
+    # "roles/compute.networkAdmin",            # (when using a shared VPC) - Required for managing shared VPC subnetwork IAM policies.
+    # "roles/compute.xpnAdmin",                # (when using a shared VPC) - Required for associating the target project with the host VPC.
+    # "roles/resourcemanager.projectIamAdmin"  # (when using a shared VPC) - Required for managing shared VPC project IAM policies.
+    # "roles/browser"                          # (when using a shared VPC) - Required for enumerating shared VPC resources.
   ]
   source               = "git::https://github.com/terraform-google-modules/terraform-google-bootstrap.git?ref=177e6be173eb8451155a133f7c6a591215130aab" # commit hash of v8.0.0
   tf_service_account_id = "org-terraform"
